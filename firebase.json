@@ -3,10 +3,12 @@
     {
       "source": "functions",
       "codebase": "default",
-      "rewrites": [{
-        "source": "**",
-        "functions": "app"
-      }],
+      "rewrites": [
+        {
+          "source": "**",
+          "functions": "app"
+        }
+      ],
       "ignore": [
         "node_modules",
         ".git",

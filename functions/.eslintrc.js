@@ -25,6 +25,10 @@ module.exports = {
     "import",
   ],
   rules: {
+    "object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/no-var-requires": 0,
+    "max-len": ["error", { code: 140 }],
+    "semi": [2, "always"],
     "quotes": ["error", "double"],
     "import/no-unresolved": 0,
     "indent": "off",
