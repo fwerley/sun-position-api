@@ -21,7 +21,7 @@ export default {
         }
 
         if (account) {
-            return res.status(429).send({
+            res.status(429).send({
                 error: { code: 429, msg: "Maximum number of API keys reached" },
             });
         }
@@ -35,12 +35,13 @@ export default {
                     usage: [{ date: today, count: 0 }],
                 },
             });
-            return res.status(200).send({ status: "Success", msg: "Data Saved" });
+            res.status(200).send({ status: "Success", msg: "Data Saved" });
         } catch (error) {
             console.log(error);
-            return res.status(500).send({ status: "Failed", msg: error });
+            res.status(500).send({ status: "Failed", msg: error });
         }
     },
+
     async refreshToken(req: express.Request, res: express.Response) {
         const apiKey = req.body.apiKey;
         const refshToken = req.body.refreshToken;
@@ -65,19 +66,20 @@ export default {
                 res.status(500).send({ status: "Failed", msg: error });
             });
     },
+    
     async getApiKey(req: express.Request, res: express.Response) {
         try {
             if (req.user) {
                 const reqDoc = db.collection("users").doc("/" + req.user.uid + "/");
                 const itemDetail = reqDoc.get();
                 const response = (await itemDetail).data();
-                return res.status(200).send({ status: "Success", response });
+                res.status(200).send({ status: "Success", response });
             } else {
                 throw new Error("The user's credentials may not grant them the required privileges to access the resource");
             }
         } catch (error) {
             console.log(error);
-            return res.status(500).send({ status: "Failed", msg: error });
+            res.status(500).send({ status: "Failed", msg: error });
         }
     }
 };

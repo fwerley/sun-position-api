@@ -3,14 +3,14 @@
     "info": {
         "version": "1.0.0",
         "title": "Sun Position API",
-        "description": "[Sun Position API] Endpoints for applications based on data consumption in JSON format.Provides the main functionalities related to the Sun Position library and the Sun Position Platform."
+        "description": "Endpoints for applications based on data consumption in JSON format.Provides the main functionalities related to the Sun Position library and the Sun Position Platform."
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:5001/sun-position-app/us-central1/app/v1"
+            "url": "https://us-central1-sun-position-app.cloudfunctions.net/app/v1"
         },
         {
-            "url": "https://us-central1-sun-position-app.cloudfunctions.net/app/v1"
+            "url": "http://127.0.0.1:5001/sun-position-app/us-central1/app/v1"
         }
     ],
     "paths": {
@@ -38,6 +38,36 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/signinSomeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Registration completed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ / "
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Email and password are required.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ / "
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "User creation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ /createSomeResponse500"
                                 }
                             }
                         }
@@ -94,7 +124,11 @@
         },
         "/user/logout": {
             "post": {
-                "description": "",
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Log out the user",
+                "description": "Clear all API service access credentials",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -110,8 +144,8 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Perform user logout",
-                "description": "This endpoint will return a user after login succefully...",
+                "summary": "Reset login credentials",
+                "description": "Retrieve and update user credentials",
                 "responses": {
                     "200": {
                         "description": "Some description...",
@@ -189,26 +223,6 @@
                     "500": {
                         "description": "Internal Server Error"
                     }
-                },
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "example": "any"
-                                    },
-                                    "lat": {
-                                        "example": "any"
-                                    },
-                                    "lng": {
-                                        "example": "any"
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
         },
@@ -272,26 +286,6 @@
                     },
                     "500": {
                         "description": "Internal Server Error"
-                    }
-                },
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "example": "any"
-                                    },
-                                    "lat": {
-                                        "example": "any"
-                                    },
-                                    "lng": {
-                                        "example": "any"
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             },
@@ -390,29 +384,59 @@
         "/service/time-zone": {
             "post": {
                 "description": "",
+                "parameters": [
+                    {
+                        "name": "x-api-key",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "x-user-id",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     },
+                    "403": {
+                        "description": "Forbidden"
+                    },
                     "404": {
                         "description": "Not Found"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
                     }
-                },
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "lat": {
-                                        "example": "any"
-                                    },
-                                    "lng": {
-                                        "example": "any"
-                                    }
-                                }
-                            }
+                }
+            }
+        },
+        "/service/api-key": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -481,27 +505,95 @@
     },
     "components": {
         "schemas": {
-            "signinSomeBody": {
+            "createUser": {
                 "type": "object",
                 "properties": {
-                    "email": {
-                        "type": "string",
-                        "example": "jhondoe@email.com"
+                    "createSomeResponse422": {
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string",
+                                "example": "Email is required"
+                            },
+                            "password": {
+                                "type": "string",
+                                "example": "Password is required"
+                            }
+                        },
+                        "required": [
+                            "email",
+                            "password"
+                        ]
                     },
-                    "password": {
-                        "type": "string",
-                        "example": "**********"
+                    "createUserBody": {
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string",
+                                "example": "jhondoe@email.com"
+                            },
+                            "password": {
+                                "type": "string",
+                                "example": "**********"
+                            }
+                        },
+                        "required": [
+                            "email",
+                            "password"
+                        ]
                     },
-                    "about": {
-                        "type": "string",
-                        "example": ""
+                    "createSomeResponse201": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "example": "Success"
+                            },
+                            "msg": {
+                                "type": "string",
+                                "example": "Verification email sent! User created successfully!"
+                            }
+                        },
+                        "required": [
+                            "status",
+                            "msg"
+                        ]
+                    },
+                    "createSomeResponse500": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "example": "Failed"
+                            },
+                            "msg": {
+                                "type": "string",
+                                "example": "error"
+                            }
+                        },
+                        "required": [
+                            "status",
+                            "msg"
+                        ]
+                    },
+                    "signinSomeBody": {
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string",
+                                "example": "jhondoe@email.com"
+                            },
+                            "password": {
+                                "type": "string",
+                                "example": "**********"
+                            }
+                        },
+                        "required": [
+                            "email",
+                            "password"
+                        ]
                     }
-                },
-                "required": [
-                    "email",
-                    "password",
-                    "about"
-                ]
+                }
             },
             "signinSomeResponse": {
                 "type": "object",
@@ -523,23 +615,33 @@
                                     "name": {
                                         "type": "string",
                                         "example": "Jhon Doe"
-                                    },
-                                    "about": {
-                                        "type": "string",
-                                        "example": ""
                                     }
-                                }
+                                },
+                                "required": [
+                                    "email",
+                                    "name"
+                                ]
                             }
-                        }
+                        },
+                        "required": [
+                            "user"
+                        ]
                     }
-                }
+                },
+                "required": [
+                    "status",
+                    "msg"
+                ]
             }
         },
         "securitySchemes": {
-            "bearerAuth": {
+            "basicAuth": {
                 "type": "http",
-                "scheme": "bearer"
+                "scheme": "basic"
             }
         }
+    },
+    "contact": {
+        "email": "werleyfn@gmail.com"
     }
 }

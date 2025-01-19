@@ -5,9 +5,6 @@ import { debug } from "firebase-functions/logger";
 
 export default {
     async index(req: express.Request, res: express.Response) {
-        /* #swagger.security = [{
-            "bearerAuth": []
-        }] */
         type Data = {
             lat: number,
             lng: number,
@@ -61,11 +58,11 @@ export default {
                 trajectory: tjy,
             });
         } catch (error) {
-            res.status(404).send({
-                message: `Sua requisição não pode ser atendida\n${error}`,
-            });
+            console.log(error);
+            res.status(500).send({ status: "Failed", msg: error });
         }
     },
+
     async timeZone(req: express.Request, res: express.Response) {
         type Data = {
             lat: number,
@@ -82,9 +79,8 @@ export default {
                 timeZone,
             });
         } catch (error) {
-            res.status(404).send({
-                message: `Sua requisição não pode ser atendida\n${error}`,
-            });
+            console.log(error);
+            res.status(500).send({ status: "Failed", msg: error });
         }
     },
 };

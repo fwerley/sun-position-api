@@ -10,23 +10,8 @@ const auth = getAuth();
 
 export default {
     async create(req: express.Request, res: express.Response) {
-        /*
-           #swagger.tags = ["Users"]
-           #swagger.summary = "Create a new user"
-           #swagger.description = "This endpoint will create a new user...""
-       */
+
         const { email, password } = req.body;
-        /*  #swagger.requestBody = {
-                required: true,
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/someBody"
-                        }
-                    }
-                }
-            }
-        */
         if (!email || !password) {
             res.status(422).json({
                 email: "Email is required",
@@ -45,11 +30,6 @@ export default {
         }
     },
     async signin(req: express.Request, res: express.Response) {
-        /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Perform user login"
-            #swagger.description = 'This endpoint will return a user after login succefully...'
-        */
         const { email, password } = req.body;
         if (!email || !password) {
             res.status(422).json({
@@ -57,27 +37,7 @@ export default {
                 password: "Password is required",
             });
         }
-        /*  #swagger.requestBody = {
-                required: true,
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/signinSomeBody"
-                        }
-                    }
-                }
-            }
-            #swagger.responses[200] = {
-                 description: "Some description...",
-                 content: {
-                     "application/json": {
-                         schema:{
-                             $ref: "#/components/schemas/signinSomeResponse"
-                         }
-                     }
-                 }
-             }
-         */
+
         try {
             const { user } = await signInWithEmailAndPassword(auth, email, password);
             res.status(200).send({ user });
@@ -97,38 +57,12 @@ export default {
         }
     },
     async resetEmail(req: express.Request, res: express.Response) {
-        /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Perform user logout"
-            #swagger.description = 'This endpoint will return a user after login succefully...'
-        */
         const { email } = req.body;
         if (!email) {
             res.status(422).json({
                 email: "Email is required",
             });
         }
-        /*  #swagger.requestBody = {
-                required: true,
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/signinSomeBody"
-                        }
-                    }
-                }
-            }
-            #swagger.responses[200] = {
-                 description: "Some description...",
-                 content: {
-                     "application/json": {
-                         schema:{
-                             $ref: "#/components/schemas/signinSomeResponse"
-                         }
-                     }
-                 }
-             }
-         */
         try {
             await sendPasswordResetEmail(auth, email);
             res.status(200).send({ msg: "Password reset email sent successfully!" });
