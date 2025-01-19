@@ -15,9 +15,9 @@ const options: swaggerJSDoc.Options = {
             {
                 url: "https://us-central1-sun-position-app.cloudfunctions.net/app/v1",
             },
-            {
-                url: "http://127.0.0.1:5001/sun-position-app/us-central1/app/v1",
-            },
+            // {
+            //     url: "http://127.0.0.1:5001/sun-position-app/us-central1/app/v1",
+            // },
         ],
         components: {
             securitySchemes: {
@@ -28,18 +28,18 @@ const options: swaggerJSDoc.Options = {
                 apiKeyAuth: {
                     type: "apiKey",
                     in: "header",
-                    name: "x-api-key",                    
-                },                                              
+                    name: "x-api-key",
+                },
             },
         },
         externalDocs: {
             url: "https://us-central1-sun-position-app.cloudfunctions.net/app/v1/docs.json",
-            description: "JSON Parameters Documentation"            
-        }
+            description: "JSON Parameters Documentation",
+        },
     },
-    apis: ['../functions/src/routes.ts', '../functions/src/schemas/*.schema.ts'],
+    apis: ["**/*.ts"],
     // apis: ['../**/routes.ts'],
-}
+};
 
 const personalOptions = {
     customCss: ".swagger-ui .topbar { display: none }",
@@ -49,12 +49,12 @@ const personalOptions = {
 
 const swaggerSpec = swaggerJSDoc(options);
 
-function swaggerDocs(app: Express, version: string, host: string | undefined = undefined) {
+function swaggerDocs(app: Express, version: string) {
     // Swagger page
     app.use(`/${version}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec, personalOptions));
     // Docs in JSON format
     app.get(`/${version}/docs.json`, (req: Request, res: Response) => {
-        res.setHeader('Content-Type', 'application/json');
+        res.setHeader("Content-Type", "application/json");
         res.send(swaggerSpec);
     });
 }

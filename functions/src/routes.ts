@@ -15,15 +15,15 @@ routes.get("/", (req, res) => {
 
 /**
  * @openapi
- * /user/register: 
- *   post: 
- *     tags: 
+ * /user/register:
+ *   post:
+ *     tags:
  *       - User
  *     summary: Create a new user
  *     description: This endpoint will create a new user
  *     requestBody:
  *       required: true
- *       content: 
+ *       content:
  *         application/json:
  *           schema:
  *             type: object
@@ -59,7 +59,7 @@ routes.get("/", (req, res) => {
  *             schema:
  *               type: object
  *               properties:
- *                 email: 
+ *                 email:
  *                   type: string
  *                   example: Email is required
  *                   description: Email is required
@@ -90,7 +90,7 @@ routes.post("/user/register", UserController.create);
  *   post:
  *    tags:
  *     - User
- *    summary: Perform user login 
+ *    summary: Perform user login
  *    description: This endpoint will return a user after login succefully
  *    requestBody:
  *     required: true
@@ -118,19 +118,19 @@ routes.post("/user/register", UserController.create);
  *          user:
  *           type: object
  *           properties:
- *            uid: 
- *             type: string  
+ *            uid:
+ *             type: string
  *             example: DSf3...
- *             description: User ID         
+ *             description: User ID
  *            email:
  *             type: string
  *             example: jhondoe@email.com
  *             description: User email
- *            emailVerified: 
+ *            emailVerified:
  *             type: boolean
  *             example: true
  *             description: Email verification status
- *            isAnonymous: 
+ *            isAnonymous:
  *             type: boolean
  *             example: false
  *             description: User is anonymous
@@ -357,9 +357,9 @@ routes.get("/project", Middleware.verifyUser, ProjectController.store);
  *   summary: Create a new project
  *   description: This endpoint will create a new project
  *   requestBody:
- *    required: true 
+ *    required: true
  *    content:
- *     application/json:  
+ *     application/json:
  *      schema:
  *       $ref: '#/components/schemas/CreateProject'
  *   responses:
@@ -574,24 +574,24 @@ routes.delete("/project/:id", Middleware.verifyUser, ProjectController.delete);
  *      required: true
  *      type: string
  *   requestBody:
- *    required: true 
+ *    required: true
  *    content:
- *     application/json:  
+ *     application/json:
  *      schema:
  *       type: object
  *       properties:
  *        lat:
  *         type: number
  *         example: 12.543
- *         description: Coordinated latitude for search 
+ *         description: Coordinated latitude for search
  *        lng:
  *         type: number
  *         example: 12.543
- *         description: Coordinated longitude for search 
+ *         description: Coordinated longitude for search
  *        dateTime:
  *         type: date-time
  *         example: '2017-07-21T17:32:28Z'
- *         description: Date time for search 
+ *         description: Date time for search
  *   responses:
  *    200:
  *     description: Request data successfully
@@ -608,11 +608,11 @@ routes.delete("/project/:id", Middleware.verifyUser, ProjectController.delete);
  *        properties:
  *         status:
  *          type: string
- *          descrition: Failed requisition 
+ *          descrition: Failed requisition
  *          example: Failed
  *         msg:
  *          type: string
- *          descrition: Message erro requisition 
+ *          descrition: Message erro requisition
  *          example: error
  *   security:
  *    - apiKeyAuth: []
@@ -638,9 +638,9 @@ routes.post("/service/sun", Middleware.verifyKey, DateController.index);
  *      required: true
  *      type: string
  *   requestBody:
- *    required: true 
+ *    required: true
  *    content:
- *     application/json:  
+ *     application/json:
  *      schema:
  *       type: object
  *       properties:
@@ -693,11 +693,11 @@ routes.post("/service/sun", Middleware.verifyKey, DateController.index);
  *        properties:
  *         status:
  *          type: string
- *          descrition: Failed requisition 
+ *          descrition: Failed requisition
  *          example: Failed
  *         msg:
  *          type: string
- *          descrition: Message erro requisition 
+ *          descrition: Message erro requisition
  *          example: error
  *   security:
  *    - apiKeyAuth: []
@@ -734,18 +734,18 @@ routes.post("/service/time-zone", Middleware.verifyKey, DateController.timeZone)
  *              items:
  *               type: object
  *               properties:
- *                date: 
+ *                date:
  *                 type: string
  *                 description: API key usage date
  *                 example: "2024-09-12"
- *                count: 
+ *                count:
  *                 type: number
  *                 description: Number of requests with the API key
- *                 example: 147 
+ *                 example: 147
  *             key:
  *              type: string
  *              description: Unique API key of the requesting user
- *              example: Dh7IS0K...          
+ *              example: Dh7IS0K...
  *    500:
  *     description: Request data failure
  *     content:
@@ -755,11 +755,11 @@ routes.post("/service/time-zone", Middleware.verifyKey, DateController.timeZone)
  *        properties:
  *         status:
  *          type: string
- *          descrition: Failed requisition 
+ *          descrition: Failed requisition
  *          example: Failed
  *         msg:
  *          type: string
- *          descrition: Message erro requisition 
+ *          descrition: Message erro requisition
  *          example: error
  *   security:
  *    - bearerAuth: []
@@ -788,7 +788,7 @@ routes.get("/service/api-key", Middleware.verifyUser, ServiceController.getApiKe
  *         msg:
  *          type: string
  *          description: Successfully data resource
- *          example: Data Saved        
+ *          example: Data Saved
  *    500:
  *     description: Request data failure
  *     content:
@@ -798,11 +798,11 @@ routes.get("/service/api-key", Middleware.verifyUser, ServiceController.getApiKe
  *        properties:
  *         status:
  *          type: string
- *          descrition: Failed requisition 
+ *          descrition: Failed requisition
  *          example: Failed
  *         msg:
  *          type: string
- *          descrition: Message erro requisition 
+ *          descrition: Message erro requisition
  *          example: error
  *    429:
  *     description: Request data failure
@@ -813,7 +813,7 @@ routes.get("/service/api-key", Middleware.verifyUser, ServiceController.getApiKe
  *        properties:
  *         code:
  *          type: number
- *          descrition: Code conflict requisition 
+ *          descrition: Code conflict requisition
  *          example: 429
  *         msg:
  *          type: string
@@ -832,16 +832,16 @@ routes.get("/service/generate-api-key", Middleware.verifyUser, ServiceController
  *   summary: Refresh token user
  *   description: Update user access credentials
  *   requestBody:
- *    required: true 
+ *    required: true
  *    content:
- *     application/json:  
+ *     application/json:
  *      schema:
  *       type: object
  *       properties:
  *        apiKey:
  *         type: string
  *         example: AnG4s...
- *         description: User API Key 
+ *         description: User API Key
  *        refreshToken:
  *         type: string
  *         example: AIz...
@@ -864,7 +864,7 @@ routes.get("/service/generate-api-key", Middleware.verifyUser, ServiceController
  *           access_token:
  *            type: string
  *            example: eyJhbG...
- *            description: Access token updated            
+ *            description: Access token updated
  *           expires_in:
  *            type: string
  *            example: 3600
@@ -898,11 +898,11 @@ routes.get("/service/generate-api-key", Middleware.verifyUser, ServiceController
  *        properties:
  *         status:
  *          type: string
- *          descrition: Failed requisition 
+ *          descrition: Failed requisition
  *          example: Failed
  *         msg:
  *          type: string
- *          descrition: Message erro requisition 
+ *          descrition: Message erro requisition
  *          example: error
  *    403:
  *     description: Request data failure
@@ -913,7 +913,7 @@ routes.get("/service/generate-api-key", Middleware.verifyUser, ServiceController
  *        properties:
  *         error:
  *          type: string
- *          descrition: No API Key provided 
+ *          descrition: No API Key provided
  *          example: No API Key provided
  */
 routes.post("/service/refresh-token", ServiceController.refreshToken);

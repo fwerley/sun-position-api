@@ -14,7 +14,7 @@ type accountType = {
 export default {
     async verifyUser(req: express.Request, res: express.Response, next: express.NextFunction) {
         const idToken = req.headers.authorization; // Assuming ID token is sent in the Authorization header
-        const token = idToken?.slice(7, idToken.length); //Bearer XXXXXXX
+        const token = idToken?.slice(7, idToken.length); // Bearer XXXXXXX
         try {
             if (token) {
                 const decodedToken = await admin.auth().verifyIdToken(token);

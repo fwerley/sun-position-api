@@ -10,7 +10,6 @@ const auth = getAuth();
 
 export default {
     async create(req: express.Request, res: express.Response) {
-
         const { email, password } = req.body;
         if (!email || !password) {
             res.status(422).json({
