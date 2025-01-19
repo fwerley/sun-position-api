@@ -1,9 +1,21 @@
 import express = require("express");
 import { db } from "../config/firebase";
 
+async function fetchTimeZone(data: { lat: any, lng: any }) {
+    const response = await fetch(
+        `https://timeapi.io/api/timezone/coordinate?latitude=${data.lat}&longitude=${data.lng}`
+    );
+    return await response.json();
+}
+
 export default {
     async create(req: express.Request, res: express.Response) {
         let { name, lat, lng } = JSON.parse(req.body);
+        const dataTimeZone = await fetchTimeZone({lat,lng});
+        const timeZone = {
+            zoneName: dataTimeZone.timeZone,
+            gmtOffset: dataTimeZone.currentUtcOffset.seconds
+        }
         try {
             if (req.user) {
                 await db.collection("users").doc("/" + req.user.uid + "/").collection("projects").doc().set({
@@ -11,6 +23,7 @@ export default {
                     name,
                     lat,
                     lng,
+                    timeZone
                 });
                 res.status(200).send({ status: "Success", msg: "Data Saved" });
             } else {
@@ -27,21 +40,26 @@ export default {
                 const reqDoc = db.collection("users").doc("/" + req.user.uid + "/").collection("projects").doc(req.params.id);
                 const itemDetail = reqDoc.get();
                 const response = (await itemDetail).data();
-                return res.status(200).send({ status: "Success", response });
+                res.status(200).send({ status: "Success", response });
             } else {
                 throw new Error("The user's credentials may not grant them the required privileges to access the resource");
             }
         } catch (error) {
             console.log(error);
-            return res.status(500).send({ status: "Failed", msg: error });
+            res.status(500).send({ status: "Failed", msg: error });
         }
     },
     async store(req: express.Request, res: express.Response) {
+        type TimeZone = {
+            gmtOffset: number
+            zoneName: string
+        }
         type ResponseItems = {
             tag: string,
             name: string,
             lat: number,
             lng: number,
+            timeZone: TimeZone,
             createdAt: Date,
         };
         try {
@@ -56,28 +74,35 @@ export default {
                             name: doc.data().name,
                             lat: doc.data().lat,
                             lng: doc.data().lng,
+                            timeZone: doc.data().timeZone,
                             createdAt: doc.data().createdAt,
                         };
                         response.push(selectedItem);
                     });
                     return response;
                 });
-                return res.status(200).send({ status: "Success", response });
+                res.status(200).send({ status: "Success", response });
             } else {
                 throw new Error("The user's credentials may not grant them the required privileges to access the resource");
             }
         } catch (error) {
-            return res.status(500).send({ status: "Failed", msg: error });
+            res.status(500).send({ status: "Failed", msg: error });
         }
     },
     async put(req: express.Request, res: express.Response) {
         let { name, lat, lng } = JSON.parse(req.body);
+        const dataTimeZone = await fetchTimeZone({lat,lng});
+        const timeZone = {
+            zoneName: dataTimeZone.timeZone,
+            gmtOffset: dataTimeZone.currentUtcOffset.seconds
+        }
         try {
             if (req.user) {
                 await db.collection("users").doc("/" + req.user.uid + "/").collection("projects").doc(req.params.id).update({
                     name,
                     lat,
                     lng,
+                    timeZone
                 });
                 res.status(200).send({ status: "Success", msg: "Data Saved" });
             } else {
@@ -93,13 +118,13 @@ export default {
             if (req.user) {
                 const reqDoc = db.collection("users").doc("/" + req.user.uid + "/").collection("projects").doc(req.params.id);
                 await reqDoc.delete();
-                return res.status(200).send({ status: "Success", msg: "Data Removed" });
+                res.status(200).send({ status: "Success", msg: "Data Deleted" });
             } else {
                 throw new Error("The user's credentials may not grant them the required privileges to access the resource");
             }
         } catch (error) {
             console.log(error);
-            return res.status(500).send({ status: "Failed", msg: error });
+            res.status(500).send({ status: "Failed", msg: error });
         }
     },
 };
