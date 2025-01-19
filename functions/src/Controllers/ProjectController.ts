@@ -1,21 +1,20 @@
 import express = require("express");
 import { db } from "../config/firebase";
+import { SunPosition } from "sun-position";
 
-async function fetchTimeZone(data: { lat: any, lng: any }) {
-    const response = await fetch(
-        `https://timeapi.io/api/timezone/coordinate?latitude=${data.lat}&longitude=${data.lng}`
-    );
-    return await response.json();
+async function fetchTimeZone(data: { lat: number, lng: number }) {
+    const sunPosition = new SunPosition(data.lat, data.lng, new Date());
+    return await sunPosition.getTimeZone();
 }
 
 export default {
     async create(req: express.Request, res: express.Response) {
-        let { name, lat, lng } = JSON.parse(req.body);
-        const dataTimeZone = await fetchTimeZone({lat,lng});
+        const { name, lat, lng } = JSON.parse(req.body);
+        const { zoneName, gmtOffset } = await fetchTimeZone({ lat, lng });
         const timeZone = {
-            zoneName: dataTimeZone.timeZone,
-            gmtOffset: dataTimeZone.currentUtcOffset.seconds
-        }
+            zoneName,
+            gmtOffset,
+        };
         try {
             if (req.user) {
                 await db.collection("users").doc("/" + req.user.uid + "/").collection("projects").doc().set({
@@ -23,7 +22,7 @@ export default {
                     name,
                     lat,
                     lng,
-                    timeZone
+                    timeZone,
                 });
                 res.status(200).send({ status: "Success", msg: "Data Saved" });
             } else {
@@ -90,19 +89,19 @@ export default {
         }
     },
     async put(req: express.Request, res: express.Response) {
-        let { name, lat, lng } = JSON.parse(req.body);
-        const dataTimeZone = await fetchTimeZone({lat,lng});
+        const { name, lat, lng } = JSON.parse(req.body);
+        const { zoneName, gmtOffset } = await fetchTimeZone({ lat, lng });
         const timeZone = {
-            zoneName: dataTimeZone.timeZone,
-            gmtOffset: dataTimeZone.currentUtcOffset.seconds
-        }
+            zoneName,
+            gmtOffset,
+        };
         try {
             if (req.user) {
                 await db.collection("users").doc("/" + req.user.uid + "/").collection("projects").doc(req.params.id).update({
                     name,
                     lat,
                     lng,
-                    timeZone
+                    timeZone,
                 });
                 res.status(200).send({ status: "Success", msg: "Data Saved" });
             } else {

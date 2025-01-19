@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * @openapi
@@ -41,7 +41,6 @@ import { z } from 'zod';
  *         gmtOffset: 0
  *         zoneName: GMT
  *        createdAt: 2021-09-01T00:00:00.000Z
- * 
  *     CreateProject:
  *      type: object
  *      properties:
@@ -62,10 +61,9 @@ import { z } from 'zod';
  *       body:
  *        name: Project Name
  *        lat: 12.3456
- *        lng: 12.3456 
- * 
+ *        lng: 12.3456
  *     UpdateProject:
- *      type: object	
+ *      type: object
  *      properties:
  *       name:
  *        type: string

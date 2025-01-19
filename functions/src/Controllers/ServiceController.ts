@@ -66,7 +66,6 @@ export default {
                 res.status(500).send({ status: "Failed", msg: error });
             });
     },
-    
     async getApiKey(req: express.Request, res: express.Response) {
         try {
             if (req.user) {
@@ -81,14 +80,13 @@ export default {
             console.log(error);
             res.status(500).send({ status: "Failed", msg: error });
         }
-    }
+    },
 };
-
 // const genAPIKey = () => {
 //     return [...Array(30)]
 //         .map(() => ((Math.random() * 36) | 0).toString(36))
 //         .join("");
 // };
 
-let genAPIKey = (n: number = 16) => [...crypto.getRandomValues(new Uint8Array(n))]
-    .map((x, i) => (i = x / 255 * 61 | 0, String.fromCharCode(i + (i > 9 ? i > 35 ? 61 : 55 : 48)))).join(``);
+const genAPIKey = (n = 16) => [...crypto.getRandomValues(new Uint8Array(n))]
+    .map((x, i) => (i = x / 255 * 61 | 0, String.fromCharCode(i + (i > 9 ? i > 35 ? 61 : 55 : 48)))).join("");

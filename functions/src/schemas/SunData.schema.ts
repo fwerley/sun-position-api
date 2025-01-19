@@ -19,7 +19,7 @@ import { z } from "zod";
  *          description: Entry latitude
  *         dateTime:
  *          type: date-time
- *          description: Entry date           
+ *          description: Entry date
  *      durationDay:
  *       type: array
  *       items:
@@ -89,7 +89,7 @@ import { z } from "zod";
  *       type: string
  *       description: Identifies the path of the Sun for the date of entry, N for north and S for south
  *    example:
- *     data: 
+ *     data:
  *      lat: 12.543
  *      lng: 12.543
  *      dateTime: 2021-09-01 00:00:00.00
@@ -120,8 +120,8 @@ import { z } from "zod";
 const Data = z.object({
     lat: z.number().min(-90, "Latitude must be between -90 and 90").max(90, "Latitude must be between -90 and 90"),
     lng: z.number().min(-180, "Longitude must be between -180 and 180").max(180, "Longitude must be between -180 and 180"),
-    dateTime: z.date()
-})
+    dateTime: z.date(),
+});
 
 const SunDataSchema = z.object({
     data: Data,
@@ -141,8 +141,8 @@ const SunDataSchema = z.object({
         }),
         sunsetAngle: z.object({
             elevation: z.number(),
-            azimuth: z.number()
-        })
+            azimuth: z.number(),
+        }),
     }),
     sunTime: z.object({
         moment: z.date(),
