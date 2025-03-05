@@ -46,7 +46,7 @@ export default {
             }
         } catch (error) {
             console.error("Error get user token:", error);
-            res.status(404).json({ error: "Not found" });
+            res.status(404).json({ error: "User not found" });
         }
         if (account && Object.is(apiKey, account.key)) {
             const today = new Date().toISOString().split("T")[0];
@@ -56,6 +56,7 @@ export default {
                     res.status(429).send({
                         error: { code: 429, msg: "Max API calls exceeded." },
                     });
+                    return;
                 } else {
                     account.usage[usageCount].count++;
                     reqDoc?.update({
@@ -74,6 +75,7 @@ export default {
         } else {
             // Reject request if API key doesn't match
             res.status(403).send({ error: { code: 403, msg: "You not allowed." } });
+            return;
         }
     },
 };

@@ -68,7 +68,7 @@ export default {
             lat: number,
             lng: number
         }
-        const data: Data = JSON.parse(req.body);
+        const data: Data = req.body;
         debug(data);
         try {
             const sunPosition = new SunPosition(data.lat, data.lng, new Date());

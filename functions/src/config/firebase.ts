@@ -7,6 +7,7 @@ import {
     signOut,
     sendEmailVerification,
     sendPasswordResetEmail,
+    updateProfile
 
 } from "firebase/auth";
 
@@ -36,6 +37,7 @@ export {
     signOut,
     sendEmailVerification,
     sendPasswordResetEmail,
+    updateProfile,
     admin,
     db,
 };

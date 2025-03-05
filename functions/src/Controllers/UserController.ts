@@ -4,13 +4,14 @@ import {
     createUserWithEmailAndPassword, getAuth,
     sendEmailVerification, sendPasswordResetEmail,
     signInWithEmailAndPassword, signOut,
+    updateProfile,
 } from "../config/firebase";
 
 const auth = getAuth();
 
 export default {
     async create(req: express.Request, res: express.Response) {
-        const { email, password } = req.body;
+        const { email, password, name } = req.body;
         if (!email || !password) {
             res.status(422).json({
                 email: "Email is required",
@@ -20,6 +21,7 @@ export default {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             if (auth.currentUser) {
+                await updateProfile(auth.currentUser, { displayName: name });
                 sendEmailVerification(auth.currentUser);
             }
             res.status(201).send({ status: "Success", msg: "Verification email sent! User created successfully!" });

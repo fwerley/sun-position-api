@@ -15,9 +15,9 @@ const options: swaggerJSDoc.Options = {
             {
                 url: "https://us-central1-sun-position-app.cloudfunctions.net/app/v1",
             },
-            // {
-            //     url: "http://127.0.0.1:5001/sun-position-app/us-central1/app/v1",
-            // },
+            {
+                url: "http://127.0.0.1:5001/sun-position-app/us-central1/app/v1",
+            },
         ],
         components: {
             securitySchemes: {
